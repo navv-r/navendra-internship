@@ -24,11 +24,11 @@
 }
 
 .slick-prev {
-  left: -35px !important;
+  left: -50px !important;
 }
 
 .slick-next {
-  right: -5px !important;
+  right: -25px !important;
 }
 
 .skeleton-box {
@@ -39,7 +39,7 @@
     #eeeeee 75%
   );
   background-size: 200% 100%;
-  animation: skeleton-loading 1.2s infinite;
+  animation: skeleton-loading 1s infinite;
 }
 
 @keyframes skeleton-loading {
