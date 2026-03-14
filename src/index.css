@@ -10,3 +10,43 @@
 @import "./css/styles/style.css";
 @import "./css/colors/scheme-01.css";
 @import "./css/styles/coloring.css";
+
+.slick-slide > div {
+  padding: 0 12px;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #5722f8 !important;
+  font-size: 50px !important;
+  width: 40px;
+  height: 40px;
+}
+
+.slick-prev {
+  left: -50px !important;
+}
+
+.slick-next {
+  right: -25px !important;
+}
+
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    #eeeeee 25%,
+    #dddddd 50%,
+    #eeeeee 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
