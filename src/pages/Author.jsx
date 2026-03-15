@@ -1,20 +1,64 @@
 import React from "react";
 import AuthorBanner from "../images/author_banner.jpg";
 import AuthorItems from "../components/author/AuthorItems";
-import { Link } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Author = () => {
+  const { authorId } = useParams();
+  const [author, setAuthor] = useState(null);
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const [newItemsResponse, hotCollectionsResponse] = await Promise.all([
+          axios.get(
+            "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems",
+          ),
+          axios.get(
+            "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
+          ),
+        ]);
+
+        const allNFTs = [
+          ...newItemsResponse.data,
+          ...hotCollectionsResponse.data,
+        ];
+
+        const foundNFT = allNFTs.find(
+          (item) =>
+            item.authorId === Number(authorId) || item.id === Number(authorId),
+        );
+
+        if (foundNFT) {
+          setAuthor({
+            name: foundNFT.authorName || "Creator",
+            authorImage: foundNFT.authorImage,
+            username: `creator${authorId}`,
+            wallet: "UDHWHUwdhw78wdt7e...",
+            followers: 573,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching author:", error);
+      }
+    };
+
+    fetchAuthor();
+  }, [authorId]);
+
+  if (!author) {
+    return <p style={{ padding: "40px" }}>Loading author...</p>;
+  }
+
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
-        <div id="top"></div>
-
         <section
           id="profile_banner"
-          aria-label="section"
           className="text-light"
-          data-bgimage="url(images/author_banner.jpg) top"
+          data-bgimage="url(../images/author_banner.jpg) top"
           style={{ background: `url(${AuthorBanner}) top` }}
         ></section>
 
@@ -22,19 +66,25 @@ const Author = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <div className="d_profile de-flex">
-                  <div className="de-flex-col">
+                <div className="profile_avatar">
+                  <div className="d-flex flex-row">
                     <div className="profile_avatar">
-                      <img src={AuthorImage} alt="" />
+                      <img src={author.authorImage} alt={author.name} />
 
                       <i className="fa fa-check"></i>
+
                       <div className="profile_name">
                         <h4>
-                          Monica Lucas
-                          <span className="profile_username">@monicaaaa</span>
-                          <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
+                          {author.name}
+
+                          <span className="profile_username">
+                            @{author.username}
                           </span>
+
+                          <span id="wallet" className="profile_wallet">
+                            {author.wallet}
+                          </span>
+
                           <button id="btn_copy" title="Copy Text">
                             Copy
                           </button>
@@ -42,20 +92,20 @@ const Author = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="profile_follow de-flex">
-                    <div className="de-flex-col">
-                      <div className="profile_follower">573 followers</div>
-                      <Link to="#" className="btn-main">
-                        Follow
-                      </Link>
+
+                  <div className="profile_follow">
+                    <div className="profile_follower">
+                      {author.followers} followers
                     </div>
+
+                    <button className="btn-main">Follow</button>
                   </div>
                 </div>
               </div>
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems />
+                  <AuthorItems authorId={authorId} />
                 </div>
               </div>
             </div>

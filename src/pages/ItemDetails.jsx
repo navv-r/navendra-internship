@@ -1,93 +1,92 @@
-import React, { useEffect } from "react";
-import EthImage from "../images/ethereum.svg";
-import { Link } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
-import nftImage from "../images/nftImage.jpg";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ItemDetails = () => {
+  const { nftId } = useParams();
+  const [nft, setNft] = useState(null);
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const fetchNFT = async () => {
+    try {
+
+      const hotCollectionsResponse = await axios.get(
+        "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections"
+      );
+
+      const hotNFT = hotCollectionsResponse.data.find(
+        (item) => item.id === Number(nftId)
+      );
+
+      if (hotNFT) {
+        setNft(hotNFT);
+        return;
+      }
+
+      const newItemsResponse = await axios.get(
+        "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
+      );
+
+      const newItemNFT = newItemsResponse.data.find(
+        (item) => item.nftId === Number(nftId)
+      );
+
+      setNft(newItemNFT);
+
+    } catch (error) {
+      console.error("Error fetching NFT:", error);
+    }
+  };
+
+  fetchNFT();
+}, [nftId]);
+
+
+  if (!nft) {
+    return <p style={{ padding: "40px" }}>Loading NFT...</p>;
+  }
 
   return (
-    <div id="wrapper">
-      <div className="no-bottom no-top" id="content">
-        <div id="top"></div>
-        <section aria-label="section" className="mt90 sm-mt-0">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6 text-center">
-                <img
-                  src={nftImage}
-                  className="img-fluid img-rounded mb-sm-30 nft-image"
-                  alt=""
-                />
-              </div>
-              <div className="col-md-6">
-                <div className="item_info">
-                  <h2>Rainbow Style #194</h2>
-
-                  <div className="item_info_counts">
-                    <div className="item_info_views">
-                      <i className="fa fa-eye"></i>
-                      100
-                    </div>
-                    <div className="item_info_like">
-                      <i className="fa fa-heart"></i>
-                      74
-                    </div>
-                  </div>
-                  <p>
-                    doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-                    illo inventore veritatis et quasi architecto beatae vitae
-                    dicta sunt explicabo.
-                  </p>
-                  <div className="d-flex flex-row">
-                    <div className="mr40">
-                      <h6>Owner</h6>
-                      <div className="item_author">
-                        <div className="author_list_pp">
-                          <Link to="/author">
-                            <img className="lazy" src={AuthorImage} alt="" />
-                            <i className="fa fa-check"></i>
-                          </Link>
-                        </div>
-                        <div className="author_list_info">
-                          <Link to="/author">Monica Lucas</Link>
-                        </div>
-                      </div>
-                    </div>
-                    <div></div>
-                  </div>
-                  <div className="de_tab tab_simple">
-                    <div className="de_tab_content">
-                      <h6>Creator</h6>
-                      <div className="item_author">
-                        <div className="author_list_pp">
-                          <Link to="/author">
-                            <img className="lazy" src={AuthorImage} alt="" />
-                            <i className="fa fa-check"></i>
-                          </Link>
-                        </div>
-                        <div className="author_list_info">
-                          <Link to="/author">Monica Lucas</Link>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="spacer-40"></div>
-                    <h6>Price</h6>
-                    <div className="nft-item-price">
-                      <img src={EthImage} alt="" />
-                      <span>1.85</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <section id="content" className="container" style={{ paddingTop: "80px" }}>
+      <div className="row">
+        {/* NFT Image */}
+        <div className="col-lg-6">
+          <div className="nft-image-wrapper">
+            <img
+              src={nft.nftImage}
+              alt={nft.title}
+              className="img-fluid"
+              style={{ borderRadius: "12px" }}
+            />
           </div>
-        </section>
+        </div>
+
+        {/* NFT Details */}
+        <div className="col-lg-6">
+          <h2>{nft.title}</h2>
+
+          <div style={{ marginTop: "20px" }}>
+            <strong>Price:</strong> {nft.price} ETH
+          </div>
+
+          <div style={{ marginTop: "10px" }}>
+            <strong>Likes:</strong> {nft.likes}
+          </div>
+
+          <div style={{ marginTop: "20px" }}>
+            <strong>Author:</strong>
+            <Link to={`/author/${nft.authorId}`} style={{ marginLeft: "8px" }}>
+              View Creator
+            </Link>
+          </div>
+
+          <div style={{ marginTop: "40px" }}>
+            <button className="btn-main">Buy Now</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
