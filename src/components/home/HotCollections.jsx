@@ -38,23 +38,23 @@ const HotCollections = () => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    autoplay: false,
     arrows: true,
+    autoplay: false,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 3,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 992,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 576,
         settings: {
           slidesToShow: 1,
         },
@@ -137,7 +137,7 @@ const HotCollections = () => {
                   <div key={collection.id}>
                     <div className="nft_coll">
                       <div className="nft_wrap">
-                        <Link to="/item-details">
+                        <Link to={`/item-details/${collection.id}`}>
                           <img
                             src={collection.nftImage}
                             className="lazy img-fluid"
@@ -147,7 +147,7 @@ const HotCollections = () => {
                       </div>
 
                       <div className="nft_coll_pp">
-                        <Link to={`/author/${collection.authorid}`}>
+                        <Link to={`/author/${collection.authorId}`}>
                           <img
                             className="lazy pp-coll"
                             src={collection.authorImage}
@@ -158,7 +158,7 @@ const HotCollections = () => {
                       </div>
 
                       <div className="nft_coll_info">
-                        <Link to="/explore">
+                        <Link to={`/item-details/${collection.id}`}>
                           <h4>{collection.title}</h4>
                         </Link>
 
