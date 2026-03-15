@@ -12,15 +12,34 @@ const Author = () => {
   useEffect(() => {
     const fetchAuthor = async () => {
       try {
-        const response = await axios.get(
-          "https://us-central1-nft-cloud-functions.cloudfunctions.net/authors",
+        const [newItemsResponse, hotCollectionsResponse] = await Promise.all([
+          axios.get(
+            "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems",
+          ),
+          axios.get(
+            "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
+          ),
+        ]);
+
+        const allNFTs = [
+          ...newItemsResponse.data,
+          ...hotCollectionsResponse.data,
+        ];
+
+        const foundNFT = allNFTs.find(
+          (item) =>
+            item.authorId === Number(authorId) || item.id === Number(authorId),
         );
 
-        const foundAuthor = response.data.find(
-          (a) => a.authorId === Number(authorId),
-        );
-
-        setAuthor(foundAuthor);
+        if (foundNFT) {
+          setAuthor({
+            name: foundNFT.authorName || "Creator",
+            authorImage: foundNFT.authorImage,
+            username: `creator${authorId}`,
+            wallet: "UDHWHUwdhw78wdt7e...",
+            followers: 573,
+          });
+        }
       } catch (error) {
         console.error("Error fetching author:", error);
       }
@@ -30,7 +49,7 @@ const Author = () => {
   }, [authorId]);
 
   if (!author) {
-    return <p>Loading author...</p>;
+    return <p style={{ padding: "40px" }}>Loading author...</p>;
   }
 
   return (
