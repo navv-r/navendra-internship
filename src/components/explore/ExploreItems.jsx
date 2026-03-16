@@ -34,7 +34,7 @@ const ExploreItems = () => {
         setLoading(false);
       }, 1000);
     } catch (error) {
-      console.error("Error fetching NFTs:", error);
+      console.error("Error fetching NFTs:", error);  
     }
   };
 
