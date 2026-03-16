@@ -25,7 +25,7 @@ const ExploreItems = () => {
 
       const timers = {};
       response.data.forEach((nft) => {
-        timers[nft.nftId] = nft.expiry;
+        timers[nft.nftId] = nft.expiryDate;
       });
 
       setCountdowns(timers);
