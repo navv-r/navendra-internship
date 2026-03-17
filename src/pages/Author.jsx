@@ -9,37 +9,28 @@ const Author = () => {
   const { authorId } = useParams();
   const [author, setAuthor] = useState(null);
 
+  const [followers, setFollowers] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+
   useEffect(() => {
     const fetchAuthor = async () => {
       try {
-        const [newItemsResponse, hotCollectionsResponse] = await Promise.all([
-          axios.get(
-            "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems",
-          ),
-          axios.get(
-            "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
-          ),
-        ]);
 
-        const allNFTs = [
-          ...newItemsResponse.data,
-          ...hotCollectionsResponse.data,
-        ];
-
-        const foundNFT = allNFTs.find(
-          (item) =>
-            item.authorId === Number(authorId) || item.id === Number(authorId),
+        const response = await axios.get(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${authorId}`
         );
 
-        if (foundNFT) {
-          setAuthor({
-            name: foundNFT.authorName || "Creator",
-            authorImage: foundNFT.authorImage,
-            username: `creator${authorId}`,
-            wallet: "UDHWHUwdhw78wdt7e...",
-            followers: 573,
-          });
-        }
+        const data = response.data;
+
+        setAuthor({
+          name: data.authorName,
+          authorImage: data.authorImage,
+          username: data.tag,
+          wallet: data.address
+        });
+
+        setFollowers(data.followers);
+
       } catch (error) {
         console.error("Error fetching author:", error);
       }
@@ -48,6 +39,16 @@ const Author = () => {
     fetchAuthor();
   }, [authorId]);
 
+  const toggleFollow = () => {
+    if (isFollowing) {
+      setFollowers((prev) => prev - 1);
+    } else {
+      setFollowers((prev) => prev + 1);
+    }
+
+    setIsFollowing(!isFollowing);
+  };
+
   if (!author) {
     return <p style={{ padding: "40px" }}>Loading author...</p>;
   }
@@ -55,26 +56,34 @@ const Author = () => {
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
+
         <section
           id="profile_banner"
           className="text-light"
-          data-bgimage="url(../images/author_banner.jpg) top"
           style={{ background: `url(${AuthorBanner}) top` }}
         ></section>
 
         <section aria-label="section">
           <div className="container">
+
             <div className="row">
+
               <div className="col-md-12">
+
                 <div className="profile_avatar">
+
                   <div className="d-flex flex-row">
+
                     <div className="profile_avatar">
+
                       <img src={author.authorImage} alt={author.name} />
 
                       <i className="fa fa-check"></i>
 
                       <div className="profile_name">
+
                         <h4>
+
                           {author.name}
 
                           <span className="profile_username">
@@ -88,29 +97,49 @@ const Author = () => {
                           <button id="btn_copy" title="Copy Text">
                             Copy
                           </button>
+
                         </h4>
+
                       </div>
+
                     </div>
+
                   </div>
 
-                  <div className="profile_follow">
+                  <div
+                    className="profile_follow"
+                    style={{ marginLeft: "auto", textAlign: "right" }}
+                  >
+
                     <div className="profile_follower">
-                      {author.followers} followers
+                      {followers} followers
                     </div>
 
-                    <button className="btn-main">Follow</button>
+                    <button className="btn-main" onClick={toggleFollow}>
+                      {isFollowing ? "Unfollow" : "Follow"}
+                    </button>
+
                   </div>
+
                 </div>
+
               </div>
 
               <div className="col-md-12">
+
                 <div className="de_tab tab_simple">
+
                   <AuthorItems authorId={authorId} />
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
         </section>
+
       </div>
     </div>
   );
