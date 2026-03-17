@@ -8,80 +8,121 @@ const ItemDetails = () => {
   const [nft, setNft] = useState(null);
 
   useEffect(() => {
-  const fetchNFT = async () => {
-    try {
+    const fetchNFT = async () => {
+      try {
+        const response = await axios.get(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${nftId}`,
+        );
 
-      const hotCollectionsResponse = await axios.get(
-        "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections"
-      );
-
-      const hotNFT = hotCollectionsResponse.data.find(
-        (item) => item.id === Number(nftId)
-      );
-
-      if (hotNFT) {
-        setNft(hotNFT);
-        return;
+        setNft(response.data);
+      } catch (error) {
+        console.error("Error fetching NFT:", error);
       }
+    };
 
-      const newItemsResponse = await axios.get(
-        "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
-      );
-
-      const newItemNFT = newItemsResponse.data.find(
-        (item) => item.nftId === Number(nftId)
-      );
-
-      setNft(newItemNFT);
-
-    } catch (error) {
-      console.error("Error fetching NFT:", error);
-    }
-  };
-
-  fetchNFT();
-}, [nftId]);
-
+    fetchNFT();
+  }, [nftId]);
 
   if (!nft) {
     return <p style={{ padding: "40px" }}>Loading NFT...</p>;
   }
 
   return (
-    <section id="content" className="container" style={{ paddingTop: "80px" }}>
+    <section id="content" className="container" style={{ paddingTop: "150px" }}>
       <div className="row">
-        {/* NFT Image */}
+        {/* LEFT SIDE NFT IMAGE */}
         <div className="col-lg-6">
-          <div className="nft-image-wrapper">
-            <img
-              src={nft.nftImage}
-              alt={nft.title}
-              className="img-fluid"
-              style={{ borderRadius: "12px" }}
-            />
-          </div>
+          <img
+            src={nft.nftImage}
+            alt={nft.title}
+            className="img-fluid"
+            style={{ borderRadius: "12px" }}
+          />
         </div>
 
-        {/* NFT Details */}
+        {/* RIGHT SIDE DETAILS */}
         <div className="col-lg-6">
-          <h2>{nft.title}</h2>
+          {/* TITLE + TAG */}
+          <h2>
+            {nft.title}
+            <span
+              style={{ marginLeft: "10px", fontSize: "14px", color: "#888" }}
+            >
+              {nft.tag}
+            </span>
+          </h2>
 
-          <div style={{ marginTop: "20px" }}>
-            <strong>Price:</strong> {nft.price} ETH
-          </div>
-
+          {/* VIEWS + LIKES */}
           <div style={{ marginTop: "10px" }}>
-            <strong>Likes:</strong> {nft.likes}
+            <span style={{ marginRight: "20px" }}>👁 {nft.views}</span>
+
+            <span>❤️ {nft.likes}</span>
           </div>
 
+          {/* DESCRIPTION */}
+          <p style={{ marginTop: "20px", color: "#777" }}>{nft.description}</p>
+
+          {/* OWNER */}
+          <div style={{ marginTop: "30px" }}>
+            <strong>Owner</strong>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <img
+                src={nft.ownerImage}
+                alt={nft.ownerName}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+              />
+
+              <span>{nft.ownerName}</span>
+            </div>
+          </div>
+
+          {/* CREATOR */}
           <div style={{ marginTop: "20px" }}>
-            <strong>Author:</strong>
-            <Link to={`/author/${nft.authorId}`} style={{ marginLeft: "8px" }}>
-              View Creator
-            </Link>
+            <strong>Creator</strong>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <img
+                src={nft.creatorImage}
+                alt={nft.creatorName}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+              />
+
+              <span>{nft.creatorName}</span>
+            </div>
           </div>
 
-          <div style={{ marginTop: "40px" }}>
+          {/* PRICE */}
+          <div
+            style={{ marginTop: "30px", fontSize: "22px", fontWeight: "bold" }}
+          >
+            {nft.price} ETH
+          </div>
+
+          {/* BUY BUTTON */}
+          <div style={{ marginTop: "30px" }}>
             <button className="btn-main">Buy Now</button>
           </div>
         </div>
