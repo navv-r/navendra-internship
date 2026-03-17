@@ -28,7 +28,7 @@ const ItemDetails = () => {
   }
 
   return (
-    <section id="content" className="container" style={{ paddingTop: "150px" }}>
+    <section id="content" className="container" style={{ paddingTop: "150px" }} data-aos="fade-up">
       <div className="row">
         {/* LEFT SIDE NFT IMAGE */}
         <div className="col-lg-6">
@@ -59,10 +59,8 @@ const ItemDetails = () => {
             <span>❤️ {nft.likes}</span>
           </div>
 
-          {/* DESCRIPTION */}
           <p style={{ marginTop: "20px", color: "#777" }}>{nft.description}</p>
 
-          {/* OWNER */}
           <div style={{ marginTop: "30px" }}>
             <strong>Owner</strong>
 
@@ -88,7 +86,6 @@ const ItemDetails = () => {
             </div>
           </div>
 
-          {/* CREATOR */}
           <div style={{ marginTop: "20px" }}>
             <strong>Creator</strong>
 
@@ -114,14 +111,12 @@ const ItemDetails = () => {
             </div>
           </div>
 
-          {/* PRICE */}
           <div
             style={{ marginTop: "30px", fontSize: "22px", fontWeight: "bold" }}
           >
             {nft.price} ETH
           </div>
 
-          {/* BUY BUTTON */}
           <div style={{ marginTop: "30px" }}>
             <button className="btn-main">Buy Now</button>
           </div>
