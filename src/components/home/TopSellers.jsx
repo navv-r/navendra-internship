@@ -59,7 +59,7 @@ const TopSellers = () => {
   );
 
   return (
-    <section id="section-popular" className="no-bottom">
+    <section id="section-popular" className="no-bottom" data-aos="fade-up">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
