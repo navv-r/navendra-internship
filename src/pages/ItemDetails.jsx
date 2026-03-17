@@ -8,48 +8,31 @@ const ItemDetails = () => {
   const [nft, setNft] = useState(null);
 
   useEffect(() => {
-  const fetchNFT = async () => {
-    try {
+    const fetchNFT = async () => {
+      try {
 
-      const hotCollectionsResponse = await axios.get(
-        "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections"
-      );
+        const response = await axios.get(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${nftId}`
+        );
 
-      const hotNFT = hotCollectionsResponse.data.find(
-        (item) => item.id === Number(nftId)
-      );
+        setNft(response.data);
 
-      if (hotNFT) {
-        setNft(hotNFT);
-        return;
+      } catch (error) {
+        console.error("Error fetching NFT:", error);
       }
+    };
 
-      const newItemsResponse = await axios.get(
-        "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
-      );
-
-      const newItemNFT = newItemsResponse.data.find(
-        (item) => item.nftId === Number(nftId)
-      );
-
-      setNft(newItemNFT);
-
-    } catch (error) {
-      console.error("Error fetching NFT:", error);
-    }
-  };
-
-  fetchNFT();
-}, [nftId]);
-
+    fetchNFT();
+  }, [nftId]);
 
   if (!nft) {
     return <p style={{ padding: "40px" }}>Loading NFT...</p>;
   }
 
   return (
-    <section id="content" className="container" style={{ paddingTop: "80px" }}>
+    <section id="content" className="container" style={{ paddingTop: "200px" }}>
       <div className="row">
+
         {/* NFT Image */}
         <div className="col-lg-6">
           <div className="nft-image-wrapper">
@@ -64,6 +47,7 @@ const ItemDetails = () => {
 
         {/* NFT Details */}
         <div className="col-lg-6">
+
           <h2>{nft.title}</h2>
 
           <div style={{ marginTop: "20px" }}>
@@ -84,6 +68,7 @@ const ItemDetails = () => {
           <div style={{ marginTop: "40px" }}>
             <button className="btn-main">Buy Now</button>
           </div>
+
         </div>
       </div>
     </section>
