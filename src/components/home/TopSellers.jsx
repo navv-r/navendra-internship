@@ -28,24 +28,6 @@ const TopSellers = () => {
     fetchSellers();
   }, []);
 
-  const renderSeller = (seller, index) => (
-    <div className="author_list" key={seller.authorId}>
-      <div className="author_list_pp">
-        <Link to={`/author/${seller.authorId}`}>
-          <img src={seller.authorImage} alt={seller.authorName} />
-          <i className="fa fa-check"></i>
-        </Link>
-      </div>
-
-      <div className="author_list_info">
-        <Link to={`/author/${seller.authorId}`}>
-          {index + 1}. {seller.authorName}
-        </Link>
-        <span>{seller.price} ETH</span>
-      </div>
-    </div>
-  );
-
   const renderSkeleton = (index) => (
     <li key={index}>
       <div className="author_list_pp">
