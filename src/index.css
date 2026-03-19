@@ -51,3 +51,181 @@
   }
 }
 
+/* ============================= */
+/* MOBILE RESPONSIVENESS (NFTS) */
+/* ============================= */
+
+/* Tablets */
+@media (max-width: 768px) {
+
+  /* Carousel wrapper */
+  .carousel-container {
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Track spacing (room for buttons) */
+  .carousel-track {
+    padding: 0 40px;
+  }
+
+  /* Center slides */
+  .slick-slide {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* NFT Card */
+  .nft__item {
+    width: 85%;
+    margin: 0 auto;
+    padding: 15px;
+  }
+
+  /* NFT Image */
+  .nft__item img {
+    width: 100%;
+    height: auto;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  /* Text adjustments */
+  .nft__item h4 {
+    font-size: 1rem;
+  }
+
+  .nft__item span,
+  .nft__item small {
+    font-size: 0.85rem;
+  }
+
+  /* Carousel Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-btn.left {
+    left: 5px;   /* closer to image */
+  }
+
+  .carousel-btn.right {
+    right: 5px;  /* closer to image */
+  }
+}
+
+
+/* Small Phones */
+@media (max-width: 480px) {
+
+  .carousel-track {
+    padding: 0 30px;
+  }
+
+  .nft__item {
+    width: 75%;
+    padding: 10px;
+  }
+
+  .nft__item img {
+    max-height: 220px;
+  }
+
+  .carousel-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .carousel-btn.left {
+    left: 2px;
+  }
+
+  .carousel-btn.right {
+    right: 2px;
+  }
+
+  .nft__item h4 {
+    font-size: 0.9rem;
+  }
+
+  .nft__item span,
+  .nft__item small {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .slick-prev {
+    left: 5px !important;
+  }
+
+  .slick-next {
+    right: 5px !important;
+  }
+
+  .slick-prev,
+  .slick-next {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slick-prev {
+    left: 2px !important;
+  }
+
+  .slick-next {
+    right: 30px !important;
+  }
+
+  .slick-prev,
+  .slick-next {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* ============================= */
+/* HOT COLLECTIONS - MOBILE FIX */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  /* Shrink the entire card */
+  .nft_coll {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  /* Control the image inside */
+  .nft_coll img {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .nft_coll {
+    width: 70%;
+  }
+
+  .nft_coll img {
+    max-height: 180px;
+  }
+}
